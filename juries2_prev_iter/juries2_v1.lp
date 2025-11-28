@@ -14,4 +14,12 @@ below(associate,full).
 :- pres(T, Pres), thesis(T, Sup, _), prof(Sup, CatSup, _, _), prof(Pres, CatPres, _, _), below(CatPres, CatSup).
 :- pres(T, Pres), mainEx(T, _, CatExam), prof(Pres, CatPres, _, _), below(CatPres, CatExam).
 
+numPres(P, N) :- prof(P, _, _, _), N = #count{ T : pres(T, P) }.
+numSup(P, N) :- prof(P, _, _, _), N = #count{ T : thesis(T, P, _) }.
+numMain(P, N) :- prof(P, _, _, _), N = #count{ T : mainEx(T, P, _) }.
+
+totalEffort(P, E) :- prof(P, _, _, _), numPres(P, NPres), numSup(P, NSup), numMain(P, NMain), E = NPres + NSup + 2*NMain.
+
+#minimize { E*E, P : totalEffort(P, E) }.
+
 #show pres/2.
